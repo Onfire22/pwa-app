@@ -49,6 +49,12 @@ const Users = () => {
       <Link to='/profile'>Мой профиль</Link>
       {showButton && <button onClick={handleInstallClick}>Установить</button>}
       <button type="button" onClick={startBarcodeScanner}>Сканировать qr код</button>
+      <div>
+        <div>Коды:</div>
+        {codes.map((code) => {
+          return <div>{code}</div>
+        })}
+      </div>
       <div className="container">
         {users.map(({ id, name, phone, username, email }) => {
           return (
@@ -59,12 +65,6 @@ const Users = () => {
               <p className="user_info">Почта: {email}</p>
             </div>
           )
-        })}
-      </div>
-      <div>
-        <div>Коды:</div>
-        {codes.map((code) => {
-          return <div>{code}</div>
         })}
       </div>
     </>
