@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { showNotification } from "../../utils";
 import './style.css';
-import { startBarcodeScanner } from "../../utils/barcodeDetection";
+import { useBarcodeScanner } from "../../utils/barcodeDetection";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-
+  const { codes, startBarcodeScanner } = useBarcodeScanner();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showButton, setShowButton] = useState(false);
 
@@ -59,6 +59,12 @@ const Users = () => {
               <p className="user_info">Почта: {email}</p>
             </div>
           )
+        })}
+      </div>
+      <div>
+        <div>Коды:</div>
+        {codes.map((code) => {
+          return <div>{code}</div>
         })}
       </div>
     </>
