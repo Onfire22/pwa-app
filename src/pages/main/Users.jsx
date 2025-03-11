@@ -6,7 +6,7 @@ import { useBarcodeScanner } from "../../utils/barcodeDetection";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const { codes, startBarcodeScanner } = useBarcodeScanner();
+  const { codes, isMapShown, startBarcodeScanner } = useBarcodeScanner();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showButton, setShowButton] = useState(false);
 
@@ -67,6 +67,7 @@ const Users = () => {
           )
         })}
       </div>
+      <div className={`video ${isMapShown ? 'shown' : 'hidden'}`} />
     </>
   );
 };
