@@ -4,12 +4,12 @@ import { useState } from "react";
 
 export const useBarcodeScanner = () => {
   const [codes, setCodes] = useState([]);
-  const [isMapShown, setIsMapShown] = useState(false);
+  const [isVideoShown, setIsVideoShown] = useState(false);
   
   const startBarcodeScanner = async () => {
+    setIsVideoShown(true);
     if (window.BarcodeDetector) {
       try {
-        setIsMapShown(true);
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "environment" }
         });
@@ -25,7 +25,7 @@ export const useBarcodeScanner = () => {
             if (barcodes.length > 0) {
               setCodes(barcodes);
               stream.getTracks().forEach(track => track.stop());
-              setIsMapShown(false);
+              setIsVideoShown(false);
             }
           } catch (error) {
             console.error("Ошибка сканирования:", error);
@@ -39,7 +39,7 @@ export const useBarcodeScanner = () => {
 
   return {
     codes,
-    isMapShown,
+    isVideoShown,
     startBarcodeScanner,
   }
 }

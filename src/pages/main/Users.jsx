@@ -6,7 +6,7 @@ import { useBarcodeScanner } from "../../utils/barcodeDetection";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const { codes, isMapShown, startBarcodeScanner } = useBarcodeScanner();
+  const { codes, isVideoShown, startBarcodeScanner } = useBarcodeScanner();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showButton, setShowButton] = useState(false);
 
@@ -19,6 +19,8 @@ const Users = () => {
       // .then(() => showNotification('Успешно', 'Список успешно загружен', '/icons/mail.svg'))
       .catch(() => showNotification('Ошибка', 'Список не загружен, произошла ошибка', '/icons/error.svg'))
   }, []);
+
+  console.log(isVideoShown);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -67,7 +69,7 @@ const Users = () => {
           )
         })}
       </div>
-      <div className={`video ${isMapShown ? 'shown' : 'hidden'}`} />
+      <div className={`video-container ${isVideoShown ? 'shown' : 'hidden'}`} />
     </>
   );
 };
