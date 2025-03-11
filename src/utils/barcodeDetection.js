@@ -1,15 +1,15 @@
+/* eslint-disable no-undef */
 import { useState } from "react";
 
-/* eslint-disable no-undef */
-const video = document.createElement("video");
-document.body.appendChild(video);
 
 export const useBarcodeScanner = () => {
   const [codes, setCodes] = useState([]);
-
+  
   const startBarcodeScanner = async () => {
     if (window.BarcodeDetector) {
       try {
+        const video = document.createElement("video");
+        document.body.appendChild(video);
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "environment" }
         });
@@ -25,6 +25,7 @@ export const useBarcodeScanner = () => {
             if (barcodes.length > 0) {
               setCodes(barcodes);
               stream.getTracks().forEach(track => track.stop());
+              video.remove();
             }
           } catch (error) {
             console.error("Ошибка сканирования:", error);
