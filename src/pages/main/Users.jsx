@@ -50,10 +50,7 @@ const Users = () => {
       {showButton && <button onClick={handleInstallClick}>Установить</button>}
       <button type="button" onClick={startBarcodeScanner}>Сканировать qr код</button>
       <div>
-        <div>Коды:</div>
-        {codes.map((code) => {
-          return <div>{code}</div>
-        })}
+        <div>Коды: {codes}</div>
       </div>
       <div className="container">
         {users.map(({ id, name, phone, username, email }) => {
