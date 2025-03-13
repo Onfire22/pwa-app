@@ -15,6 +15,7 @@ export const useBarcodeScanner = () => {
         video.srcObject = stream;
         await video.play();
         const barcodeDetector = new BarcodeDetector({ formats: ["qr_code", "code_128"] });
+        // можно добавить другие форматы https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API#supported_barcode_formats
         const interval = setInterval(async () => {
           try {
             const barcodes = await barcodeDetector.detect(video);

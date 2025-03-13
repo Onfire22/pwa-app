@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { showNotification } from "../../utils";
-import './style.css';
 import { useBarcodeScanner } from "../../utils/barcodeDetection";
+import './style.css';
+import { getCityName } from "../../utils/geolocation";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const { codes, startBarcodeScanner } = useBarcodeScanner();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showButton, setShowButton] = useState(false);
-
+  const [location, setLocation] = useState({});
+  const [city, setCity] = useState('');
+  
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
-      .then(data => data.json())
-      .then(users => {
-        setUsers(users);
-      })
-      // .then(() => showNotification('Успешно', 'Список успешно загружен', '/icons/mail.svg'))
-      .catch(() => showNotification('Ошибка', 'Список не загружен, произошла ошибка', '/icons/error.svg'))
+    .then(data => data.json())
+    .then(users => {
+      setUsers(users);
+    })
+    // .then(() => showNotification('Успешно', 'Список успешно загружен', '/icons/mail.svg'))
+    .catch(() => showNotification('Ошибка', 'Список не загружен, произошла ошибка', '/icons/error.svg'))
   }, []);
 
   useEffect(() => {
@@ -34,6 +37,18 @@ const Users = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation(position);
+          getCityName(position.coords.latitude, position.coords.longitude)
+            .then(data => setCity(data.display_name));
+      },
+      (error) => error,
+    )}
+  }, []);
+
   const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -48,8 +63,8 @@ const Users = () => {
     <>
       <Link to='/profile'>Мой профиль</Link>
       {showButton && <button onClick={handleInstallClick}>Установить</button>}
-      <button type="button" onClick={startBarcodeScanner}>Сканировать qr код</button>
-      <div>
+      <button type="button" className="scan" onClick={startBarcodeScanner}>Сканировать qr код</button>
+      <Link to='/custom-scanner'>Scan qr with library</Link>
       <div>
         <h3>Найденные QR-коды:</h3>
         {codes.length > 0 ? (
@@ -58,6 +73,10 @@ const Users = () => {
           <p>Нет данных</p>
         )}
       </div>
+      <div>Ваше местоположение:
+        <div>{location?.coords?.latitude || '-'}</div>
+        <div>{location?.coords?.longitude || '-'}</div>
+        <div>Город: {city}</div>
       </div>
       <div className="container">
         {users.map(({ id, name, phone, username, email }) => {
