@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { showNotification } from "../../utils";
 import { useBarcodeScanner } from "../../utils/barcodeDetection";
-import './style.css';
 import { getCityName } from "../../utils/geolocation";
+import { startBackgroundFetch } from "../../utils/backgroundFetchApi";
+import './style.css';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -64,7 +65,7 @@ const Users = () => {
       <Link to='/profile'>Мой профиль</Link>
       {showButton && <button onClick={handleInstallClick}>Установить</button>}
       <button type="button" className="scan" onClick={startBarcodeScanner}>Сканировать qr код</button>
-      <Link to='/custom-scanner'>Scan qr with library</Link>
+      {/* <Link to='/custom-scanner'>Scan qr with library</Link> */}
       <div>
         <h3>Найденные QR-коды:</h3>
         {codes.length > 0 ? (
@@ -78,6 +79,7 @@ const Users = () => {
         <div>{location?.coords?.longitude || '-'}</div>
         <div>Город: {city}</div>
       </div>
+      <button type="button" onClick={() => startBackgroundFetch('https://nbg1-speed.hetzner.com/100MB.bin')}>Скачать файл</button>
       <div className="container">
         {users.map(({ id, name, phone, username, email }) => {
           return (

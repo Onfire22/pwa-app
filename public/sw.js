@@ -55,3 +55,25 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(getFetchFirst(request));
   }
 })
+
+// сервисворкеры для фоновой загрузки
+self.addEventListener('backgroundfetchsuccess', async (event) => {
+  const cache = await caches.open('background-fetch-cache');
+  const records = await event.registration.matchAll();
+
+  for (const record of records) {
+      const response = await record.responseReady;
+      await cache.put(record.request, response);
+  }
+
+  event.waitUntil(
+      self.registration.showNotification('Загрузка завершена', {
+          body: 'Ваши файлы загружены!',
+          icon: '/icon.png'
+      })
+  );
+});
+
+self.addEventListener('backgroundfetchfail', (event) => {
+  console.log('Фоновая загрузка не удалась:', event.registration.id);
+});
